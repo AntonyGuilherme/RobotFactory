@@ -9,6 +9,7 @@
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
+fr.tp.inf112.projects.robotsim/libs/*
 
 # Package Files #
 *.jar
