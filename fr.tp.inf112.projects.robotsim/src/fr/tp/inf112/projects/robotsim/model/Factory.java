@@ -9,7 +9,6 @@ import fr.tp.inf112.projects.canvas.controller.Observer;
 import fr.tp.inf112.projects.canvas.model.Canvas;
 import fr.tp.inf112.projects.canvas.model.Figure;
 import fr.tp.inf112.projects.canvas.model.Style;
-import fr.tp.inf112.projects.robotsim.model.motion.Motion;
 import fr.tp.inf112.projects.robotsim.model.shapes.PositionedShape;
 import fr.tp.inf112.projects.robotsim.model.shapes.RectangularShape;
 
@@ -95,7 +94,7 @@ public class Factory extends Component implements Canvas, Observable {
 		return super.toString() + " components=" + components + "]";
 	}
 	
-	public synchronized boolean isSimulationStarted() {
+	public boolean isSimulationStarted() {
 		return simulationStarted;
 	}
 
@@ -104,16 +103,16 @@ public class Factory extends Component implements Canvas, Observable {
 			this.simulationStarted = true;
 			notifyObservers();
 
-			//while (isSimulationStarted()) {
+			while (isSimulationStarted()) {
 				behave();
 				
-				//try {
-					//Thread.sleep(100);
-				//}
-				//catch (final InterruptedException ex) {
-				//	System.err.println("Simulation was abruptely interrupted");
-			//	}
-			//}
+				try {
+					Thread.sleep(100);
+				}
+				catch (final InterruptedException ex) {
+					System.err.println("Simulation was abruptely interrupted");
+				}
+			}
 		}
 	}
 
@@ -127,36 +126,13 @@ public class Factory extends Component implements Canvas, Observable {
 
 	@Override
 	public boolean behave() {
-		// this always return true
-		//boolean behaved = true;
+		boolean behaved = true;
+		
 		for (final Component component : getComponents()) {
-			System.out.println(String.format("Robot %s %b", component.getName(), isSimulationStarted()));
-			new Thread(component).start();
-			//behaved = component.behave() || behaved;
+			behaved = component.behave() || behaved;
 		}
 		
-		return true;
-	}
-	
-	public synchronized int moveTo(Component component, Position targetPosition) {
-		
-		final PositionedShape shape = new RectangularShape(	targetPosition.getxCoordinate(),
-				   											targetPosition.getyCoordinate(), 
-				   											2, 2);
-	
-		if (!hasMobileComponentAt(shape, this)) {
-			Motion direction = new Motion(component.getPosition(), targetPosition);
-			
-			component.updateNextPosition(null);
-			
-			return direction.moveToTarget();
-		}
-		
-		
-		
-		component.updateNextPosition(targetPosition);
-		
-		return 0;
+		return behaved;
 	}
 	
 	@Override

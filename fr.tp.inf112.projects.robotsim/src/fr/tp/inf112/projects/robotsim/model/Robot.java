@@ -24,13 +24,13 @@ public class Robot extends Component {
 	
 	private int speed;
 	
-	private final List<Component> targets;
+	private final List<Component> targetComponents;
 	
-	private transient Iterator<Component> targetsIter;
+	private transient Iterator<Component> targetComponentsIterator;
 	
-	private Component currentTarget;
+	private Component currTargetComponent;
 	
-	private transient Iterator<Position> currentPathIter;
+	private transient Iterator<Position> currentPathPositionsIter;
 	
 	private transient boolean blocked;
 	
@@ -49,9 +49,9 @@ public class Robot extends Component {
 		
 		this.battery = battery;
 		
-		targets = new ArrayList<>();
-		currentTarget = null;
-		currentPathIter = null;
+		targetComponents = new ArrayList<>();
+		currTargetComponent = null;
+		currentPathPositionsIter = null;
 		speed = 5;
 		blocked = false;
 		nextPosition = null;
@@ -70,12 +70,12 @@ public class Robot extends Component {
 		this.speed = speed;
 	}
 	
-	public boolean addTarget(final Component target) {
-		return targets.add(target);
+	public boolean addTargetComponent(final Component targetComponent) {
+		return targetComponents.add(targetComponent);
 	}
 	
-	public boolean removeTarget(final Component target) {
-		return targets.remove(target);
+	public boolean removeTargetComponent(final Component targetComponent) {
+		return targetComponents.remove(targetComponent);
 	}
 	
 	@Override
@@ -85,107 +85,69 @@ public class Robot extends Component {
 
 	@Override
 	public boolean behave() {
-		final int movedDistance = moveToTarget();
-		
-		if (movedDistance != 0) {
-			battery.consume(movedDistance);
-			
-			return true;
+		if (targetComponents.isEmpty()) {
+			return false;
 		}
 		
-		return false;
-	}
-	
-	@Override
-	public void run() {
-		
-		while(isSimulationStarted()) {
-			//System.out.println(String.format("Robot %s %b", this.getName(), isSimulationStarted()));
-			try {
-				Thread.sleep(50);
-				behave();
-			} catch (InterruptedException e) {
-				System.out.println("The robot thread was not able to await");
-			}
-		}
-	}
-	
-	private int moveToTarget() {
-		if (targets.isEmpty()) {
-			return 0;
-		}
-			
-		if (targetsIter == null) {
-			targetsIter = targets.iterator();
-			initCurrentTarget();
+		if (currTargetComponent == null || hasReachedCurrentTarget()) {
+			currTargetComponent = nextTargetComponentToVisit();
 		}
 		
-		if (hasReachedCurrentTarget()) {
-			if (!targetsIter.hasNext()) {
-				targetsIter = targets.iterator();
-			}
-			
-			initCurrentTarget();
-		}
+		computePathToCurrentTargetComponent();
 
-		//final Motion direction = computeMotion();
-		final int displacement = computeMotion();
+		return moveToNextPathPosition() != 0;
+	}
 		
-		//if (direction == null) {
-		//	displacement = 0;
-		//}
-		////else {
-		//	displacement = direction.moveToTarget();
-		//}
+	private Component nextTargetComponentToVisit() {
+		if (targetComponentsIterator == null || !targetComponentsIterator.hasNext()) {
+			targetComponentsIterator = targetComponents.iterator();
+		}
+		
+		return targetComponentsIterator.hasNext() ? targetComponentsIterator.next() : null;
+	}
+	
+	private int moveToNextPathPosition() {
+		final Motion motion = computeMotion();
+		
+		final int displacement = motion == null ? 0 : motion.moveToTarget();
 			
 		notifyObservers();
-			
+		
 		return displacement;
 	}
 	
-	private void initCurrentTarget() {
-		currentTarget = targetsIter.next();
-		final List<Position> currentPath = pathFinder.findPath(this, currentTarget);
-		currentPathIter = currentPath.iterator();
+	private void computePathToCurrentTargetComponent() {
+		final List<Position> currentPathPositions = pathFinder.findPath(this, currTargetComponent);
+		currentPathPositionsIter = currentPathPositions.iterator();
 	}
 	
-	@Override
-	public void updateNextPosition(Position position) {
-		this.nextPosition = position;
-	}
-	
-	private int computeMotion() {
-		
-		// There is no free path to the target
-		if (!currentPathIter.hasNext()) {
+	private Motion computeMotion() {
+		if (!currentPathPositionsIter.hasNext()) {
+
+			// There is no free path to the target
 			blocked = true;
 			
-			return 0;
+			return null;
 		}
 		
-		final Position nextPosition = this.nextPosition == null ? currentPathIter.next() : this.nextPosition;
-		
-		return getFactory().moveTo(this, nextPosition);
-		
-		//final PositionedShape shape = new RectangularShape(nextPosition.getxCoordinate(),
-		//		   										   nextPosition.getyCoordinate(),
-		//		   										   2,	
-		//		   										   2);
-		// this step is responsible to check if exists another component at the interest position
-		// in this case of existence of another robot they simply stop 
-		//if (getFactory().hasMobileComponentAt(shape, this)) {
-		//	this.nextPosition = nextPosition;
-			
-			//return null;
-		//}
+		final Position nextPosition = this.nextPosition == null ? currentPathPositionsIter.next() : this.nextPosition;
+		final PositionedShape shape = new RectangularShape(nextPosition.getxCoordinate(),
+				   										   nextPosition.getyCoordinate(),
+				   										   2,
+				   										   2);
+//		if (getFactory().hasMobileComponentAt(shape, this)) {
+//			this.nextPosition = nextPosition;
+//			
+//			return null;
+//		}
 
-		//this.nextPosition = null;
+		this.nextPosition = null;
 		
-		//return new Motion(getPosition(), nextPosition);
+		return new Motion(getPosition(), nextPosition);
 	}
 	
 	private boolean hasReachedCurrentTarget() {
-		return getPositionedShape().overlays(currentTarget.getPositionedShape());
+		return getPositionedShape().overlays(currTargetComponent.getPositionedShape());
 	}
 	
 	@Override

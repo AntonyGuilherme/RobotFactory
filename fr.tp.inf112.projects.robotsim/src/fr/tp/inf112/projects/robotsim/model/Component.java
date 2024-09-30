@@ -7,7 +7,7 @@ import fr.tp.inf112.projects.canvas.model.Style;
 import fr.tp.inf112.projects.robotsim.model.shapes.PositionedShape;
 import fr.tp.inf112.projects.canvas.model.Shape;
 
-public abstract class Component implements Figure, Serializable, Runnable {
+public abstract class Component implements Figure, Serializable {
 	
 	private static final long serialVersionUID = -5960950869184030220L;
 
@@ -15,7 +15,7 @@ public abstract class Component implements Figure, Serializable, Runnable {
 
 	private final Factory factory;
 	
-	private final PositionedShape shape;
+	private final PositionedShape positionedShape;
 	
 	private final String name;
 
@@ -23,7 +23,7 @@ public abstract class Component implements Figure, Serializable, Runnable {
 						final PositionedShape shape,
 						final String name) {
 		this.factory = factory;
-		this.shape = shape;
+		this.positionedShape = shape;
 		this.name = name;
 
 		if (factory != null) {
@@ -40,7 +40,7 @@ public abstract class Component implements Figure, Serializable, Runnable {
 	}
 
 	public PositionedShape getPositionedShape() {
-		return shape;
+		return positionedShape;
 	}
 	
 	public Position getPosition() {
@@ -107,15 +107,6 @@ public abstract class Component implements Figure, Serializable, Runnable {
 		return false;
 	}
 	
-	// to evict that resources will be throw away for no specific reason
-	@Override
-	public void run() {
-		behave();
-	}
-	
-	public void updateNextPosition(Position position) {}
-	
-	
 	public boolean isMobile() {
 		return false;
 	}
@@ -142,7 +133,7 @@ public abstract class Component implements Figure, Serializable, Runnable {
 		return getPositionedShape();
 	}
 	
-	public synchronized boolean isSimulationStarted() {
+	public boolean isSimulationStarted() {
 		return getFactory().isSimulationStarted();
 	}
 }
