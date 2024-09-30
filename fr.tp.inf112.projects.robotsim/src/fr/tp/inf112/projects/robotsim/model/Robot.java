@@ -149,6 +149,11 @@ public class Robot extends Component {
 		currentPathIter = currentPath.iterator();
 	}
 	
+	@Override
+	public void updateNextPosition(Position position) {
+		this.nextPosition = position;
+	}
+	
 	private int computeMotion() {
 		
 		// There is no free path to the target

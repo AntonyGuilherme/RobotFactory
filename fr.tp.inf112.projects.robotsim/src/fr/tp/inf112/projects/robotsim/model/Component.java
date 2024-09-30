@@ -113,6 +113,8 @@ public abstract class Component implements Figure, Serializable, Runnable {
 		behave();
 	}
 	
+	public void updateNextPosition(Position position) {}
+	
 	
 	public boolean isMobile() {
 		return false;

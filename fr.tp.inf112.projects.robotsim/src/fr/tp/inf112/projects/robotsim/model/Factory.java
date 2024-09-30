@@ -147,8 +147,14 @@ public class Factory extends Component implements Canvas, Observable {
 		if (!hasMobileComponentAt(shape, this)) {
 			Motion direction = new Motion(component.getPosition(), targetPosition);
 			
+			component.updateNextPosition(null);
+			
 			return direction.moveToTarget();
 		}
+		
+		
+		
+		component.updateNextPosition(targetPosition);
 		
 		return 0;
 	}
