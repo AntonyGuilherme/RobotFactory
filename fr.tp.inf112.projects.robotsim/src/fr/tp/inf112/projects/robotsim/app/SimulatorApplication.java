@@ -2,6 +2,7 @@ package fr.tp.inf112.projects.robotsim.app;
 
 import java.awt.Component;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
@@ -26,12 +27,13 @@ import fr.tp.inf112.projects.robotsim.model.shapes.CircularShape;
 import fr.tp.inf112.projects.robotsim.model.shapes.RectangularShape;
 
 public class SimulatorApplication {
-
+	
+	private static final Logger LOGGER = Logger.getLogger(SimulatorApplication.class.getName());
+			
 	public static void main(String[] args) {
-		System.out.println("Starting the robot simulator...");
-		
-		System.out.println("With parameters " + Arrays.toString(args) + ".");
-		
+		LOGGER.info("Starting the robot simulator...");
+		LOGGER.config("With parameters " + Arrays.toString(args) + ".");
+
 		final Factory factory = new Factory(200, 200, "Simple Test Puck Factory");
 		final Room room1 = new Room(factory, new RectangularShape(20, 20, 75, 75), "Production Room 1");
 		new Door(room1, Room.WALL.BOTTOM, 10, 20, true, "Entrance");

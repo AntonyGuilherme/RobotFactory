@@ -14,4 +14,5 @@
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="fr.tp.inf112.projects.robotsim.app.SimulatorApplication"/>
     <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="fr.tp.inf112.projects.robotsim"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="fr.tp.inf112.projects.robotsim"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Djava.util.logging.config.file=config/logging.properties"/>
 </launchConfiguration>
