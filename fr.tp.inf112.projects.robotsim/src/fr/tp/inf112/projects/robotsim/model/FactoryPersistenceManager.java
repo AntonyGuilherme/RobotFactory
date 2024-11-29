@@ -25,8 +25,7 @@ public class FactoryPersistenceManager extends AbstractCanvasPersistenceManager 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Canvas read(final String canvasId)
-	throws IOException {
+	public Canvas read(final String canvasId) throws IOException {
 		try (
 			final InputStream fileInputStream = new FileInputStream(canvasId);
 			final InputStream bufInputStream = new BufferedInputStream(fileInputStream);

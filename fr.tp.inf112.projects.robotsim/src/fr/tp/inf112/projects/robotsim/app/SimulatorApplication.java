@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import fr.tp.inf112.projects.canvas.model.Canvas;
 import fr.tp.inf112.projects.canvas.model.impl.BasicVertex;
 import fr.tp.inf112.projects.canvas.view.CanvasViewer;
 import fr.tp.inf112.projects.canvas.view.FileCanvasChooser;
@@ -17,6 +18,7 @@ import fr.tp.inf112.projects.robotsim.model.Door;
 import fr.tp.inf112.projects.robotsim.model.Factory;
 import fr.tp.inf112.projects.robotsim.model.FactoryPersistenceManager;
 import fr.tp.inf112.projects.robotsim.model.Machine;
+import fr.tp.inf112.projects.robotsim.model.RemoteFactoryPersistenceManager;
 import fr.tp.inf112.projects.robotsim.model.Robot;
 import fr.tp.inf112.projects.robotsim.model.Room;
 import fr.tp.inf112.projects.robotsim.model.path.CustomDijkstraFactoryPathFinder;
@@ -61,7 +63,7 @@ public class SimulatorApplication {
 		conveyorShape.addVertex(new BasicVertex(xCoordinate, yCoordinate + height - baselineSize));
 
 		final Room chargingRoom = new Room(factory, new RectangularShape(125, 125, 50, 50), "Charging Room");
-		new Door(chargingRoom, Room.WALL.RIGHT, 10, 20, false, "Entrance");
+		new Door(chargingRoom, Room.WALL.RIGHT, 10, 20, true, "Entrance");
 		final ChargingStation chargingStation = new ChargingStation(factory, new RectangularShape(150, 145, 15, 15), "Charging Station");
 
 		final FactoryPathFinder jgraphPahtFinder = new JGraphTDijkstraFactoryPathFinder(factory, 5);
@@ -78,14 +80,15 @@ public class SimulatorApplication {
 		robot2.addTargetComponent(machine2);
 		robot2.addTargetComponent(new Conveyor(factory, conveyorShape, "Conveyor 1"));
 		
+		
 		SwingUtilities.invokeLater(new Runnable() {
 			  
 			@Override
 	        public void run() {
 				final FileCanvasChooser canvasChooser = new FileCanvasChooser("factory", "Puck Factory");
-				final Component factoryViewer = new CanvasViewer(new SimulatorController(factory, new FactoryPersistenceManager(canvasChooser)));
+				final Component factoryViewer = new CanvasViewer(new SimulatorController(factory, new RemoteFactoryPersistenceManager(canvasChooser)));
+				
 				canvasChooser.setViewer(factoryViewer);
-				//new CanvasViewer(factory);
 			}
 		});
 	}
