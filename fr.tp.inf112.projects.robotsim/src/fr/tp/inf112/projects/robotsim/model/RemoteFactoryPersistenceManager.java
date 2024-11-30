@@ -21,6 +21,10 @@ public class RemoteFactoryPersistenceManager extends AbstractCanvasPersistenceMa
 	public RemoteFactoryPersistenceManager(CanvasChooser canvasChooser) {
 		super(canvasChooser);
 	}
+	
+	public RemoteFactoryPersistenceManager() {
+		super(null);
+	}
 
 	@Override
 	public Canvas read(String path) {

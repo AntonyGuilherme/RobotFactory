@@ -11,6 +11,8 @@ public class Conveyor extends Component {
 					final String name) {
 		super(factory, shape, name);
 	}
+	
+	public Conveyor() {}
 
 	@Override
 	public String toString() {

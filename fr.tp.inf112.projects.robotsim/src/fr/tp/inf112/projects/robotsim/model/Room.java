@@ -3,6 +3,8 @@ package fr.tp.inf112.projects.robotsim.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import fr.tp.inf112.projects.robotsim.model.shapes.PositionedShape;
 import fr.tp.inf112.projects.robotsim.model.shapes.RectangularShape;
 
@@ -14,17 +16,17 @@ public class Room extends Component {
 	
 	private static final int WALL_THICKNESS = 5;
 	
-	private final PositionedShape leftWall;
+	private PositionedShape leftWall;
 	
-	private final PositionedShape rightWall;
+	private PositionedShape rightWall;
 	
-	private final PositionedShape topWall;
+	private PositionedShape topWall;
 	
-	private final PositionedShape bottomWall;
+	private PositionedShape bottomWall;
 	
-	private final List<Area> areas;
+	private List<Area> areas;
 
-	private final List<Door> doors;
+	private List<Door> doors;
 
 	public Room(final Factory factory,
 				final RectangularShape shape,
@@ -39,6 +41,8 @@ public class Room extends Component {
 		areas = new ArrayList<>();
 		doors = new ArrayList<>();
 	}
+	
+	public Room() {}
 	
 	protected boolean addArea(final Area area) {
 		return areas.add(area);
@@ -78,6 +82,7 @@ public class Room extends Component {
 		return true;
 	}
 	
+	@JsonIgnore
 	private Door getOverlayedDoor(final PositionedShape shape) {
 		for (final Door door : getDoors()) {
 			if (door.overlays(shape)) {

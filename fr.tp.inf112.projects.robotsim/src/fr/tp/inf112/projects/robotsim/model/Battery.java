@@ -6,14 +6,16 @@ public class Battery implements Serializable {
 	
 	private static final long serialVersionUID = 5744149485828674046L;
 
-	private final float capacity;
+	private float capacity;
 	
 	private float level;
 
-	public Battery(final float capacity) {
+	public Battery(float capacity) {
 		this.capacity = capacity;
 		level = capacity;
 	}
+	
+	public Battery() {}
 	
 	public float consume(float energy) {
 		level-= energy;

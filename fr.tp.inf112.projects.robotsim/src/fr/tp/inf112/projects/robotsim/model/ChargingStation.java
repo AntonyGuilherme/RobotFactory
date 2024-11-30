@@ -1,5 +1,7 @@
 package fr.tp.inf112.projects.robotsim.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import fr.tp.inf112.projects.robotsim.model.shapes.PositionedShape;
 import fr.tp.inf112.projects.robotsim.model.shapes.RectangularShape;
 
@@ -7,6 +9,7 @@ public class ChargingStation extends Component {
 	
 	private static final long serialVersionUID = -154228412357092561L;
 	
+	@JsonInclude
 	private boolean charging;
 
 	public ChargingStation(final Room room,
@@ -22,6 +25,8 @@ public class ChargingStation extends Component {
 		
 		charging = false;
 	}
+	
+	public ChargingStation() {}
 
 	@Override
 	public String toString() {
@@ -31,7 +36,7 @@ public class ChargingStation extends Component {
 	protected boolean isCharging() {
 		return charging;
 	}
-
+	
 	protected void setCharging(boolean charging) {
 		this.charging = charging;
 	}

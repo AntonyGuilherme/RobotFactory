@@ -6,9 +6,9 @@ public class RectangularShape extends PositionedShape implements RectangleShape 
 	
 	private static final long serialVersionUID = -6113167952556242089L;
 
-	private final int width;
+	private int width;
 
-	private final int heigth;
+	private int height;
 
 	public RectangularShape(final int xCoordinate,
 							final int yCoordinate,
@@ -17,8 +17,10 @@ public class RectangularShape extends PositionedShape implements RectangleShape 
 		super(xCoordinate, yCoordinate);
 	
 		this.width = width;
-		this.heigth = heigth;
+		this.height = heigth;
 	}
+	
+	public RectangularShape() {}
 
 	@Override
 	public int getWidth() {
@@ -27,11 +29,11 @@ public class RectangularShape extends PositionedShape implements RectangleShape 
 
 	@Override
 	public int getHeight() {
-		return heigth;
+		return height;
 	}
 
 	@Override
 	public String toString() {
-		return super.toString() + " [width=" + width + ", heigth=" + heigth + "]";
+		return super.toString() + " [width=" + width + ", heigth=" + height + "]";
 	}
 }

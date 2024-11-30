@@ -17,6 +17,8 @@ public class Position implements Serializable {
 		this.xCoordinate = xCoordinate;
 		this.yCoordinate = yCoordinate;
 	}
+	
+	public Position() {}
 
 	public int getxCoordinate() {
 		return xCoordinate;

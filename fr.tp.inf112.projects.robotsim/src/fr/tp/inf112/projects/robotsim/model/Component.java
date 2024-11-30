@@ -2,6 +2,9 @@ package fr.tp.inf112.projects.robotsim.model;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import fr.tp.inf112.projects.canvas.model.Figure;
 import fr.tp.inf112.projects.canvas.model.Style;
 import fr.tp.inf112.projects.robotsim.model.shapes.PositionedShape;
@@ -12,16 +15,17 @@ public abstract class Component implements Figure, Serializable {
 	private static final long serialVersionUID = -5960950869184030220L;
 
 	private String id;
-
-	private final Factory factory;
 	
-	private final PositionedShape positionedShape;
+	@JsonBackReference
+	private Factory factory;
 	
-	private final String name;
+	private PositionedShape positionedShape;
+	
+	private String name;
 
-	protected Component(final Factory factory,
-						final PositionedShape shape,
-						final String name) {
+	protected Component( Factory factory,
+						 PositionedShape shape,
+						 String name) {
 		this.factory = factory;
 		this.positionedShape = shape;
 		this.name = name;
@@ -30,6 +34,8 @@ public abstract class Component implements Figure, Serializable {
 			factory.addComponent(this);
 		}
 	}
+	
+	public Component() {}
 	
 	public String getId() {
 		return id;
@@ -43,6 +49,7 @@ public abstract class Component implements Figure, Serializable {
 		return positionedShape;
 	}
 	
+	@JsonIgnore
 	public Position getPosition() {
 		return getPositionedShape().getPosition();
 	}
@@ -52,6 +59,7 @@ public abstract class Component implements Figure, Serializable {
 	}
 
 	@Override
+	@JsonIgnore
 	public int getxCoordinate() {
 		return getPositionedShape().getxCoordinate();
 	}
@@ -67,6 +75,7 @@ public abstract class Component implements Figure, Serializable {
 	}
 
 	@Override
+	@JsonIgnore
 	public int getyCoordinate() {
 		return getPositionedShape().getyCoordinate();
 	}
@@ -94,11 +103,13 @@ public abstract class Component implements Figure, Serializable {
 		return getClass().getSimpleName() + " [name=" + name + " xCoordinate=" + getxCoordinate() + ", yCoordinate=" + getyCoordinate()
 				+ ", shape=" + getPositionedShape();
 	}
-
+	
+	@JsonIgnore
 	public int getWidth() {
 		return getPositionedShape().getWidth();
 	}
-
+	
+	@JsonIgnore
 	public int getHeight() {
 		return getPositionedShape().getHeight();
 	}
@@ -107,6 +118,7 @@ public abstract class Component implements Figure, Serializable {
 		return false;
 	}
 	
+	@JsonIgnore
 	public boolean isMobile() {
 		return false;
 	}
@@ -124,15 +136,18 @@ public abstract class Component implements Figure, Serializable {
 	}
 	
 	@Override
+	@JsonIgnore
 	public Style getStyle() {
 		return ComponentStyle.DEFAULT;
 	}
 	
 	@Override
+	@JsonIgnore
 	public Shape getShape() {
 		return getPositionedShape();
 	}
 	
+	@JsonIgnore
 	public boolean isSimulationStarted() {
 		return getFactory().isSimulationStarted();
 	}

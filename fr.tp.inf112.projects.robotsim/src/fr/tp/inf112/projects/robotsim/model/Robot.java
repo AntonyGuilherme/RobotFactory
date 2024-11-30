@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import fr.tp.inf112.projects.canvas.model.Style;
 import fr.tp.inf112.projects.canvas.model.impl.RGBColor;
 import fr.tp.inf112.projects.robotsim.model.motion.Motion;
@@ -20,18 +22,21 @@ public class Robot extends Component {
 
 	private static final Style BLOCKED_STYLE = new ComponentStyle(RGBColor.RED, RGBColor.BLACK, 3.0f, new float[]{4.0f});
 
-	private final Battery battery;
+	private Battery battery;
 	
 	private int speed;
 	
-	private final List<Component> targetComponents;
+	private List<Component> targetComponents;
 	
+	@JsonIgnore
 	private transient Iterator<Component> targetComponentsIterator;
 	
 	private Component currTargetComponent;
 	
+	@JsonIgnore
 	private transient Iterator<Position> currentPathPositionsIter;
 	
+	@JsonIgnore
 	private transient boolean blocked;
 	
 	private Position nextPosition;
@@ -56,6 +61,8 @@ public class Robot extends Component {
 		blocked = false;
 		nextPosition = null;
 	}
+	
+	public Robot() {}
 
 	@Override
 	public String toString() {

@@ -9,6 +9,10 @@
 	<classpathentry kind="lib" path="libs/jgrapht/lib/jgrapht-core-1.5.2.jar" sourcepath="libs/jgrapht/source/jgrapht-core"/>
 	<classpathentry kind="lib" path="libs/jgrapht/lib/jheaps-0.14.jar"/>
 	<classpathentry kind="lib" path="libs/graph.jar"/>
-	<classpathentry kind="lib" path="libs/canvas-viewer.jar" sourcepath="libs/canvas-viewer.jar"/>
+	<classpathentry kind="lib" path="C:/Users/word2/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.17.2/jackson-annotations-2.17.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/word2/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.17.2/jackson-core-2.17.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/word2/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.17.2/jackson-databind-2.17.2.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="C:/Users/word2/Documents/TELECOM/FirstSemesterPartOne/ProgrammationAvanceeEtGestionDeProject/SLR/fr.tp.inf112.projects.robotsim/canvas-viewer.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

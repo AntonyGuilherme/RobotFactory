@@ -11,6 +11,8 @@ public class Puck extends Component {
 				final String name) {
 		super(factory, shape, name);
 	}
+	
+	public Puck() {}
 
 	@Override
 	public String toString() {

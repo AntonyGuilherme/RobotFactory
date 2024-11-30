@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import fr.tp.inf112.projects.canvas.controller.Observable;
 import fr.tp.inf112.projects.canvas.controller.Observer;
 import fr.tp.inf112.projects.canvas.model.Canvas;
@@ -13,16 +16,17 @@ import fr.tp.inf112.projects.robotsim.model.shapes.PositionedShape;
 import fr.tp.inf112.projects.robotsim.model.shapes.RectangularShape;
 
 public class Factory extends Component implements Canvas, Observable {
-
-	private static final long serialVersionUID = 5156526483612458192L;
 	
+	// this is my real model
+	private static final long serialVersionUID = 5156526483612458192L;	
 	private static final ComponentStyle DEFAULT = new ComponentStyle(5.0f);
-
-
-    private final List<Component> components;
-
-	private transient List<Observer> observers;
-
+	
+	@JsonManagedReference
+    private List<Component> components;
+	
+    @JsonIgnore
+    private transient List<Observer> observers;
+    @JsonIgnore
 	private transient boolean simulationStarted;
 	
 	public Factory(final int width,
@@ -33,6 +37,9 @@ public class Factory extends Component implements Canvas, Observable {
 		components = new ArrayList<>();
 		observers = null;
 		simulationStarted = false;
+	}
+	
+	public Factory() {
 	}
 	
 	protected List<Observer> getObservers() {
@@ -78,16 +85,18 @@ public class Factory extends Component implements Canvas, Observable {
 		
 		return false;
 	}
-
+	
 	protected List<Component> getComponents() {
 		return components;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
+	@JsonIgnore
 	public Collection<Figure> getFigures() {
 		return (Collection) components;
 	}
+	
 
 	@Override
 	public String toString() {
@@ -115,6 +124,7 @@ public class Factory extends Component implements Canvas, Observable {
 			}
 		}
 	}
+	
 
 	public void stopSimulation() {
 		if (isSimulationStarted()) {
