@@ -17,6 +17,7 @@ import fr.tp.inf112.projects.robotsim.model.Conveyor;
 import fr.tp.inf112.projects.robotsim.model.Door;
 import fr.tp.inf112.projects.robotsim.model.Factory;
 import fr.tp.inf112.projects.robotsim.model.FactoryPersistenceManager;
+import fr.tp.inf112.projects.robotsim.model.FactorySerialyzer;
 import fr.tp.inf112.projects.robotsim.model.Machine;
 import fr.tp.inf112.projects.robotsim.model.RemoteFactoryPersistenceManager;
 import fr.tp.inf112.projects.robotsim.model.Robot;
@@ -31,6 +32,7 @@ import fr.tp.inf112.projects.robotsim.model.shapes.RectangularShape;
 public class SimulatorApplication {
 	
 	private static final Logger LOGGER = Logger.getLogger(SimulatorApplication.class.getName());
+	private static String SIMULATION_ID = "vasco.factory";
 			
 	public static void main(String[] args) {
 		LOGGER.info("Starting the robot simulator...");
@@ -80,13 +82,20 @@ public class SimulatorApplication {
 		robot2.addTargetComponent(machine2);
 		robot2.addTargetComponent(new Conveyor(factory, conveyorShape, "Conveyor 1"));
 		
+		//SimulationClient client = new SimulationClient(SIMULATION_ID);
+		//Factory remoteFactory = client.getFactory();
+		
+		//FactorySerialyzer serialyzer = new FactorySerialyzer();
+		//String json = serialyzer.toJSON(factory);
+		//Factory remoteFactory = serialyzer.createFactoryFrom(json);
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			  
 			@Override
 	        public void run() {
 				final FileCanvasChooser canvasChooser = new FileCanvasChooser("factory", "Puck Factory");
-				final Component factoryViewer = new CanvasViewer(new SimulatorController(factory, new RemoteFactoryPersistenceManager(canvasChooser)));
+				SimulatorController controller = new SimulatorController(factory, new RemoteFactoryPersistenceManager(canvasChooser));
+				final Component factoryViewer = new CanvasViewer(controller);
 				
 				canvasChooser.setViewer(factoryViewer);
 			}
