@@ -35,9 +35,8 @@ public class FactoryPersistenceManager extends AbstractCanvasPersistenceManager 
 			return (Canvas) objectInputStrteam.readObject();
 		}
 		catch (ClassNotFoundException | IOException ex) {
-			throw new IOException(ex);
+			return null;
 		}
-
 	}
 
 	/**

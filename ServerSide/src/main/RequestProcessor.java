@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.util.logging.Logger;
 import fr.tp.inf112.projects.canvas.model.Canvas;
 import fr.tp.inf112.projects.robotsim.model.FactoryPersistenceManager;
+import fr.tp.inf112.projects.robotsim.model.FactorySerialyzer;
 
 public class RequestProcessor implements Runnable {
 	final private Socket socket;
@@ -38,7 +39,13 @@ public class RequestProcessor implements Runnable {
 				logger.info(String.format("READING FILE %s", canvasId));
 				
 				Canvas canvas = this.persistManager.read(canvasId);
-				System.out.println(canvas);
+				
+				if (canvas == null) {
+					FactorySerialyzer serialyzer = new FactorySerialyzer();
+					canvas = serialyzer.createFactoryMock();
+					canvas.setId(canvasId);
+					persistManager.persist(canvas);
+				}
 				
 				OutputStream out = socket.getOutputStream();
 				BufferedOutputStream bufferOutStream = new BufferedOutputStream(out);

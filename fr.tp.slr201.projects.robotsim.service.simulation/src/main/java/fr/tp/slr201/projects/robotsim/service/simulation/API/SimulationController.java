@@ -52,14 +52,13 @@ public class SimulationController {
 		
 		if (simulations.containsKey(simulationId)) {
 			return serialyzer.toJSON(simulations.get(simulationId));
+		} 
+		else {
+			Factory factoryOrDefault = persistenceManager.read(simulationId);
+			simulations.put(simulationId, factoryOrDefault);
+			
+			return serialyzer.toJSON(factoryOrDefault);
 		}
-		
-		Factory factory = serialyzer.createFactoryMock();
-				//persistenceManager.read(simulationId);
-		
-		simulations.put(simulationId, factory);
-		
-		return serialyzer.toJSON(factory);
 	}
 	
 	@GetMapping("/stop-simulation")
