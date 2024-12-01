@@ -1,11 +1,5 @@
 package fr.tp.inf112.projects.robotsim.app;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -14,7 +8,6 @@ import fr.tp.inf112.projects.canvas.controller.Observer;
 import fr.tp.inf112.projects.canvas.model.Canvas;
 import fr.tp.inf112.projects.canvas.model.CanvasPersistenceManager;
 import fr.tp.inf112.projects.robotsim.model.Factory;
-import fr.tp.inf112.projects.robotsim.model.FactorySerialyzer;
 import fr.tp.inf112.projects.robotsim.model.RemoteFactoryPersistenceManager;
 
 public class RemoteSimulationController implements CanvasViewerController {
@@ -64,9 +57,20 @@ public class RemoteSimulationController implements CanvasViewerController {
 	 */
 	@Override
 	public void setCanvas(final Canvas canvasModel) {
+		
 		if (factoryModel == null) { 
 			this.factoryModel = (Factory) canvasModel;
 			return;
+		}
+		
+		// Considering the case when the user change the factory that is being simulated
+		if (factoryModel.getId()  != null && canvasModel.getId() != null &&
+			!factoryModel.getId().equalsIgnoreCase(canvasModel.getId())) {
+			
+			System.out.println(String.format("%s %s", factoryModel.getId(), canvasModel.getId()));
+			this.simulationStarted.set(false);
+			client.stopSimulation();
+			client.setSimulationId(canvasModel.getId());
 		}
 		
 		List<Observer> observers = null;

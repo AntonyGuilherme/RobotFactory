@@ -64,4 +64,8 @@ public class SimulationClient {
 			e.printStackTrace();
 		}
 	}
+
+	public void setSimulationId(String id) {
+		this.simulatioId = id;	
+	}
 }
