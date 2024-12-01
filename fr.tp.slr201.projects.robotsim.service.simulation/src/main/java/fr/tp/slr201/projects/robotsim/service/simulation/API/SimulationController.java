@@ -1,5 +1,6 @@
 package fr.tp.slr201.projects.robotsim.service.simulation.API;
 import fr.tp.inf112.projects.robotsim.model.Factory;
+import fr.tp.inf112.projects.robotsim.model.FactorySerialyzer;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -11,6 +12,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Hashtable;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,15 +25,17 @@ public class SimulationController {
 	private static final Hashtable<String, Factory> simulations = new Hashtable<String, Factory>();
 	private final FactoryRepository persistenceManager = new FactoryRepository();
 	private static final Logger LOGGER = Logger.getLogger(SimulationController.class.getName());
+	private final FactorySerialyzer serialyzer = new FactorySerialyzer();
+	
 	
 	@GetMapping("/start-simulation")
 	public boolean startSimulation(@RequestParam String simulationId) {
 		try {
 			LOGGER.info(String.format("STARTING SIMULATION %s", simulationId));
-			Factory factory = persistenceManager.read(simulationId);
+			final Factory factory = simulations.get(simulationId);
 			
 			new Thread(() -> factory.startSimulation()).start();
-		
+			
 			simulations.put(simulationId, factory); 
 			
 			return true;
@@ -42,14 +46,20 @@ public class SimulationController {
 		}
 	}
 	
-	@GetMapping("/retrieve-smiluation")
-	public Factory retrieveSimulation(@RequestParam String simulationId) {
+	@GetMapping("/retrieve-simulation")
+	public String retrieveSimulation(@RequestParam String simulationId) {
 		LOGGER.info(String.format("GETTING SIMULATION %s", simulationId));
 		
-		if (simulations.containsKey(simulationId))
-			return simulations.get(simulationId);
+		if (simulations.containsKey(simulationId)) {
+			return serialyzer.toJSON(simulations.get(simulationId));
+		}
 		
-		return null;
+		Factory factory = serialyzer.createFactoryMock();
+				//persistenceManager.read(simulationId);
+		
+		simulations.put(simulationId, factory);
+		
+		return serialyzer.toJSON(factory);
 	}
 	
 	@GetMapping("/stop-simulation")

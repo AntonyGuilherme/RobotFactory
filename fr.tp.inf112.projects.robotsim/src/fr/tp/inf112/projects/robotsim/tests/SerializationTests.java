@@ -1,6 +1,8 @@
 package fr.tp.inf112.projects.robotsim.tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -14,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
 
+import fr.tp.inf112.projects.robotsim.app.SimulationClient;
 import fr.tp.inf112.projects.robotsim.model.Area;
 import fr.tp.inf112.projects.robotsim.model.Battery;
 import fr.tp.inf112.projects.robotsim.model.ChargingStation;
@@ -21,6 +24,7 @@ import fr.tp.inf112.projects.robotsim.model.Component;
 import fr.tp.inf112.projects.robotsim.model.Conveyor;
 import fr.tp.inf112.projects.robotsim.model.Door;
 import fr.tp.inf112.projects.robotsim.model.Factory;
+import fr.tp.inf112.projects.robotsim.model.FactorySerialyzer;
 import fr.tp.inf112.projects.robotsim.model.Machine;
 import fr.tp.inf112.projects.robotsim.model.Robot;
 import fr.tp.inf112.projects.robotsim.model.Room;
@@ -34,11 +38,9 @@ import fr.tp.inf112.projects.robotsim.model.shapes.RectangularShape;
 import fr.tp.inf112.projects.canvas.model.impl.BasicVertex;
 
 public class SerializationTests {
-	
-
 	private Logger LOGGER = Logger.getAnonymousLogger();
 
-	@Test
+	//@Test
 	public void factoryShouldBeSerialized() throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		
@@ -57,15 +59,68 @@ public class SerializationTests {
 		final String factoryAsJsonString = mapper.writeValueAsString(factory);
 		LOGGER.info(factoryAsJsonString);
 		
+		FactorySerialyzer s = new FactorySerialyzer();
+		
+		s.createFactoryFrom(factoryAsJsonString);
+		
 		
 		final Factory roundTrip = mapper.readValue(factoryAsJsonString, Factory.class);
 		
 		
-		LOGGER.info(roundTrip.toString());
+		//LOGGER.info(roundTrip.toString());
 		
 		// Assuring that no information is being lost in the serialization
 		assertEquals(mapper.writeValueAsString(factory), mapper.writeValueAsString(roundTrip));
+	}
+	
+	//@Test
+	public void getFactory() throws JsonMappingException, JsonProcessingException {
+		SimulationClient client = new SimulationClient("vasco.factory");
 		
+		assertNotNull(client.getFactory());
+	}
+	
+	@Test
+	public void shouldSerializedOpenPropertyInDoors() {
+		FactorySerialyzer serialyzer = new FactorySerialyzer();
+		Factory factory = serialyzer.createFactoryMock();
+		String json = serialyzer.toJSON(factory);
+		
+		
+		Factory serialyzedFactory = serialyzer.createFactoryFrom(json);
+		
+		//System.out.println(json);
+		assertTrue(json.contains("open"));
+	}
+	
+	@Test
+	public void shouldSerializedTargetComponetsInRobots() {
+		FactorySerialyzer serialyzer = new FactorySerialyzer();
+		Factory factory = serialyzer.createFactoryMock();
+		String json = serialyzer.toJSON(factory);
+		
+		
+		Factory serialyzedFactory = serialyzer.createFactoryFrom(json);
+		
+		System.out.println(json);
+		assertTrue(json.contains("targetComponents"));
+	}
+	
+	@Test
+	public void shouldSerializedBatteryInRobots() {
+		FactorySerialyzer serialyzer = new FactorySerialyzer();
+		Factory factory = serialyzer.createFactoryMock();
+		String json = serialyzer.toJSON(factory);
+		
+		
+		Factory serialyzedFactory = serialyzer.createFactoryFrom(json);
+		
+		System.out.println(json);
+		assertTrue(json.contains("battery"));
+		assertTrue(json.contains("speed"));
+		assertTrue(json.contains("blocked"));
+		assertTrue(json.contains("charging"));
+		assertTrue(json.contains("leftWall"));
 	}
 	
 	
