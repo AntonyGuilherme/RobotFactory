@@ -17,6 +17,14 @@ public class Battery implements Serializable {
 	
 	public Battery() {}
 	
+	public float getCapacity() {
+		return capacity;
+	}
+	
+	public float getLevel() {
+		return level;
+	}
+	
 	public float consume(float energy) {
 		level-= energy;
 		
