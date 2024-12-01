@@ -53,7 +53,7 @@ public class FactorySerialyzer {
 		}
 	}
 	
-	public final Factory createFactoryMock() {
+	public static final Factory createFactoryMock() {
 		
 		final Factory factory = new Factory(200, 200, "Simple Test Puck Factory");
 		final Room room1 = new Room(factory, new RectangularShape(20, 20, 75, 75), "Production Room 1");
