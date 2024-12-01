@@ -42,6 +42,7 @@ public class Factory extends Component implements Canvas, Observable {
 	public Factory() {
 	}
 	
+	@JsonIgnore
 	public List<Observer> getObservers() {
 		if (observers == null) {
 			observers = new ArrayList<>();
@@ -86,7 +87,7 @@ public class Factory extends Component implements Canvas, Observable {
 		return false;
 	}
 	
-	protected List<Component> getComponents() {
+	public List<Component> getComponents() {
 		return components;
 	}
 
@@ -116,7 +117,7 @@ public class Factory extends Component implements Canvas, Observable {
 				behave();
 				
 				try {
-					Thread.sleep(100);
+					Thread.sleep(500);
 				}
 				catch (final InterruptedException ex) {
 					System.err.println("Simulation was abruptely interrupted");
@@ -146,10 +147,12 @@ public class Factory extends Component implements Canvas, Observable {
 	}
 	
 	@Override
+	@JsonIgnore
 	public Style getStyle() {
 		return DEFAULT;
 	}
 	
+	@JsonIgnore
 	public boolean hasObstacleAt(final PositionedShape shape) {
 		for (final Component component : getComponents()) {
 			if (component.overlays(shape) && !component.canBeOverlayed(shape)) {
@@ -160,6 +163,7 @@ public class Factory extends Component implements Canvas, Observable {
 		return false;
 	}
 	
+	@JsonIgnore
 	public boolean hasMobileComponentAt(final PositionedShape shape,
 										final Component movingComponent) {
 		for (final Component component : getComponents()) {

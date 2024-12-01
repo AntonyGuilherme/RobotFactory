@@ -31,6 +31,10 @@ public class CircularShape extends PositionedShape implements OvalShape {
 	public int getHeight() {
 		return getWidth();
 	}
+	
+	public int getRadius() {
+		return radius;
+	}
 
 	@Override
 	public String toString() {

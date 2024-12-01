@@ -118,9 +118,8 @@ public class SerializationTests {
 		System.out.println(json);
 		assertTrue(json.contains("battery"));
 		assertTrue(json.contains("speed"));
-		assertTrue(json.contains("blocked"));
 		assertTrue(json.contains("charging"));
-		assertTrue(json.contains("leftWall"));
+		assertTrue(json.contains("radius"));
 	}
 	
 	

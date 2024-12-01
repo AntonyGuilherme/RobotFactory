@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import fr.tp.inf112.projects.canvas.model.Style;
 import fr.tp.inf112.projects.canvas.model.impl.RGBColor;
@@ -36,8 +38,7 @@ public class Robot extends Component {
 	@JsonIgnore
 	private transient Iterator<Position> currentPathPositionsIter;
 	
-	@JsonIgnore
-	private transient boolean blocked;
+	public transient boolean blocked;
 	
 	private Position nextPosition;
 	
@@ -62,19 +63,29 @@ public class Robot extends Component {
 		nextPosition = null;
 	}
 	
-	public Robot() {}
-
-	@Override
+	public Robot() {
+		targetComponents = new ArrayList<>();
+	}
+	
+	public List<Component> getTargetComponents() {
+		return this.targetComponents;
+	}
+	
+ 	@Override
 	public String toString() {
 		return super.toString() + " battery=" + battery + "]";
 	}
 
-	protected int getSpeed() {
+	public int getSpeed() {
 		return speed;
 	}
 
-	protected void setSpeed(final int speed) {
+	public void setSpeed(final int speed) {
 		this.speed = speed;
+	}
+	
+	public Battery getBattery() {
+		return battery;
 	}
 	
 	public boolean addTargetComponent(final Component targetComponent) {
@@ -86,6 +97,7 @@ public class Robot extends Component {
 	}
 	
 	@Override
+	@JsonIgnore
 	public boolean isMobile() {
 		return true;
 	}
@@ -153,6 +165,7 @@ public class Robot extends Component {
 		return new Motion(getPosition(), nextPosition);
 	}
 	
+	@JsonIgnore
 	private boolean hasReachedCurrentTarget() {
 		return getPositionedShape().overlays(currTargetComponent.getPositionedShape());
 	}
@@ -163,6 +176,7 @@ public class Robot extends Component {
 	}
 	
 	@Override
+	@JsonIgnore
 	public Style getStyle() {
 		return blocked ? BLOCKED_STYLE : STYLE;
 	}
