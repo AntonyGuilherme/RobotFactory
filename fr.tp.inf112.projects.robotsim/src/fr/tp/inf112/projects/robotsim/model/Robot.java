@@ -3,10 +3,9 @@ package fr.tp.inf112.projects.robotsim.model;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import fr.tp.inf112.projects.canvas.model.Style;
 import fr.tp.inf112.projects.canvas.model.impl.RGBColor;
@@ -43,6 +42,8 @@ public class Robot extends Component {
 	private Position nextPosition;
 	
 	private FactoryPathFinder pathFinder;
+	
+	AtomicBoolean isMobile = new AtomicBoolean(true);
 
 	public Robot(final Factory factory,
 				 final FactoryPathFinder pathFinder,
@@ -99,7 +100,7 @@ public class Robot extends Component {
 	@Override
 	@JsonIgnore
 	public boolean isMobile() {
-		return true;
+		return isMobile.get();
 	}
 
 	@Override
@@ -127,14 +128,50 @@ public class Robot extends Component {
 	
 	private int moveToNextPathPosition() {
 		final Motion motion = computeMotion();
+		int displacement = motion == null ? 0 : motion.moveToTarget();
+		if (displacement != 0) {
+			notifyObservers();
+		}
 		
-		final int displacement = motion == null ? 0 : motion.moveToTarget();
-			
-		notifyObservers();
+		else if (isLivelyLocked()) {
+			displacement = calculateDisplacement();
+		}
+		return displacement;
+	}
+
+	private synchronized int calculateDisplacement() {
+		final Position freeNeighbouringPosition = findFreeNeighbouringPosition();
+		int displacement = 0;
 		
+		if (freeNeighbouringPosition != null) {
+			nextPosition = freeNeighbouringPosition;
+			displacement = moveToNextPathPosition();
+			computePathToCurrentTargetComponent();
+		}
 		return displacement;
 	}
 	
+	private Position findFreeNeighbouringPosition() {
+		final PositionedShape shape = new RectangularShape(nextPosition.getxCoordinate(),
+				   nextPosition.getyCoordinate(),
+				   2,
+				   2);
+		
+		shape.setyCoordinate(shape.getyCoordinate() + speed);
+		if(!getFactory().hasObstacleAt(shape))
+			return shape.getPosition();
+		
+		shape.setyCoordinate(shape.getyCoordinate() - speed);
+		if(!getFactory().hasObstacleAt(shape))
+			return shape.getPosition();
+		
+		shape.setxCoordinate(shape.getxCoordinate() - speed);
+		if(!getFactory().hasObstacleAt(shape))
+			return shape.getPosition();
+		
+		return null;
+	}
+
 	private void computePathToCurrentTargetComponent() {
 		final List<Position> currentPathPositions = pathFinder.findPath(this, currTargetComponent);
 		currentPathPositionsIter = currentPathPositions.iterator();
@@ -154,15 +191,31 @@ public class Robot extends Component {
 				   										   nextPosition.getyCoordinate(),
 				   										   2,
 				   										   2);
-//		if (getFactory().hasMobileComponentAt(shape, this)) {
-//			this.nextPosition = nextPosition;
-//			
-//			return null;
-//		}
+		if (getFactory().hasMobileComponentAt(shape, this)) {
+			this.nextPosition = nextPosition;
+			this.isMobile.set(false);
+			
+			return null;
+		}
 
 		this.nextPosition = null;
 		
 		return new Motion(getPosition(), nextPosition);
+	}
+	
+	
+	@JsonIgnore
+	public boolean isLivelyLocked() {
+		final Position nextPosition = this.nextPosition;
+		if (nextPosition == null) {
+			return false;
+		}
+		final PositionedShape shape = new RectangularShape(nextPosition.getxCoordinate(),
+				   nextPosition.getyCoordinate(),
+				   2,
+				   2);
+		
+		return getFactory().hasMobileComponentAt(shape, this);
 	}
 	
 	@JsonIgnore

@@ -117,7 +117,7 @@ public class Factory extends Component implements Canvas, Observable {
 				behave();
 				
 				try {
-					Thread.sleep(500);
+					Thread.sleep(100);
 				}
 				catch (final InterruptedException ex) {
 					System.err.println("Simulation was abruptely interrupted");
