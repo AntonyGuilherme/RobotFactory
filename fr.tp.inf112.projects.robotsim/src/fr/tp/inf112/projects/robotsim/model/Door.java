@@ -1,6 +1,10 @@
 package fr.tp.inf112.projects.robotsim.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 import fr.tp.inf112.projects.canvas.model.Style;
 import fr.tp.inf112.projects.canvas.model.impl.RGBColor;
@@ -97,15 +101,12 @@ public class Door extends Component {
 	@Override
 	@JsonIgnore
 	public Style getStyle() {
-		return isOpen() ? OPEN_STYLE : ComponentStyle.DEFAULT_BLACK;
+		return open ? OPEN_STYLE : ComponentStyle.DEFAULT_BLACK;
 	}
-
-	private boolean isOpen() {
-		return open;
-	}
-
-	public boolean open() {
-		if (isOpen()) {
+	
+	@JsonIgnore
+	public boolean isTheDoorOpen() {
+		if (open) {
 			return false;
 		}
 		
@@ -117,7 +118,7 @@ public class Door extends Component {
 	}
 
 	public boolean close() {
-		if (isOpen()) {
+		if (open) {
 			open = false;
 			
 			notifyObservers();
@@ -127,6 +128,11 @@ public class Door extends Component {
 		
 		return false;
 	}
+	
+	public boolean getOpen() {
+		return this.open;
+	}
+
 
 	@Override
 	public String toString() {
@@ -135,6 +141,6 @@ public class Door extends Component {
 	
 	@Override
 	public boolean canBeOverlayed(final PositionedShape shape) {
-		return isOpen();
+		return isTheDoorOpen();
 	}
 }
