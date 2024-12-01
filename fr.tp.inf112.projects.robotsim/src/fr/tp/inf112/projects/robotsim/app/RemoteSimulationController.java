@@ -122,7 +122,7 @@ public class RemoteSimulationController implements CanvasViewerController {
 	 */
 	@Override
 	public void stopAnimation() {
-		client.startSimulation();
+		client.stopSimulation();
 		
 		setCanvas(client.getFactory());
 		
@@ -134,7 +134,7 @@ public class RemoteSimulationController implements CanvasViewerController {
 	 */
 	@Override
 	public boolean isAnimationRunning() {
-		return factoryModel != null && factoryModel.isSimulationStarted();
+		return this.simulationStarted.get();
 	}
 
 	/**
