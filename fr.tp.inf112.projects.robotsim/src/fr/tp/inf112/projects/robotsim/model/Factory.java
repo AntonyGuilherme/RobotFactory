@@ -3,6 +3,7 @@ package fr.tp.inf112.projects.robotsim.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -16,8 +17,6 @@ import fr.tp.inf112.projects.robotsim.model.shapes.PositionedShape;
 import fr.tp.inf112.projects.robotsim.model.shapes.RectangularShape;
 
 public class Factory extends Component implements Canvas, Observable {
-	
-	// this is my real model
 	private static final long serialVersionUID = 5156526483612458192L;	
 	private static final ComponentStyle DEFAULT = new ComponentStyle(5.0f);
 	
@@ -28,15 +27,18 @@ public class Factory extends Component implements Canvas, Observable {
     private transient List<Observer> observers;
     @JsonIgnore
 	private transient boolean simulationStarted;
+    
+    private Logger logger = Logger.getLogger("Factory");
 	
 	public Factory(final int width,
 				   final int height,
-				   final String name ) {
+				   final String name) {
 		super(null, new RectangularShape(0, 0, width, height), name);
 		
 		components = new ArrayList<>();
 		observers = null;
 		simulationStarted = false;
+		
 	}
 	
 	public Factory() {
@@ -120,7 +122,7 @@ public class Factory extends Component implements Canvas, Observable {
 					Thread.sleep(100);
 				}
 				catch (final InterruptedException ex) {
-					System.err.println("Simulation was abruptely interrupted");
+					logger.warning("Simulation was abruptely interrupted");
 				}
 			}
 		}

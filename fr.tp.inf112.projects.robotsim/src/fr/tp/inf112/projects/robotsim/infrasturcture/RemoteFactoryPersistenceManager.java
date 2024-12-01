@@ -1,23 +1,19 @@
-package fr.tp.inf112.projects.robotsim.model;
+package fr.tp.inf112.projects.robotsim.infrasturcture;
 
 import java.util.logging.Logger;
 
 import fr.tp.inf112.projects.canvas.model.Canvas;
-import fr.tp.inf112.projects.canvas.model.CanvasChooser;
 import fr.tp.inf112.projects.canvas.model.impl.AbstractCanvasPersistenceManager;
-import fr.tp.inf112.projects.robotsim.infrasturcture.FactoryRepository;
+import fr.tp.inf112.projects.canvas.view.FileCanvasChooser;
+import fr.tp.inf112.projects.robotsim.model.Factory;
 
 public class RemoteFactoryPersistenceManager extends AbstractCanvasPersistenceManager {
 
 	private FactoryRepository repository;
-
-	public RemoteFactoryPersistenceManager(CanvasChooser canvasChooser) {
-		super(canvasChooser);
-		this.repository = new FactoryRepository(Logger.getLogger("Repository"));
-	}
 	
-	public RemoteFactoryPersistenceManager() {
-		super(null);
+	public RemoteFactoryPersistenceManager(FileCanvasChooser canvasChooser, Logger logger) {
+		super(canvasChooser);
+		this.repository = new FactoryRepository(logger);
 	}
 
 	@Override

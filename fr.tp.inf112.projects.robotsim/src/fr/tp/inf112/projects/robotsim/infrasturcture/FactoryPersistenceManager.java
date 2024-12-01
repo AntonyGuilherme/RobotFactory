@@ -1,4 +1,4 @@
-package fr.tp.inf112.projects.robotsim.model;
+package fr.tp.inf112.projects.robotsim.infrasturcture;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

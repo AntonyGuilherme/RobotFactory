@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Logger;
 
-import fr.tp.inf112.projects.robotsim.model.FactoryPersistenceManager;
+import fr.tp.inf112.projects.robotsim.infrasturcture.FactoryPersistenceManager;
 
 public class Server {
 	private static final Logger LOGGER = Logger.getLogger(Server.class.getName());

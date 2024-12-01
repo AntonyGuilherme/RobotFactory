@@ -10,8 +10,8 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.logging.Logger;
 import fr.tp.inf112.projects.canvas.model.Canvas;
-import fr.tp.inf112.projects.robotsim.model.FactoryPersistenceManager;
-import fr.tp.inf112.projects.robotsim.model.FactorySerialyzer;
+import fr.tp.inf112.projects.robotsim.infrasturcture.FactoryPersistenceManager;
+import fr.tp.inf112.projects.robotsim.infrasturcture.FactorySerialyzer;
 
 public class RequestProcessor implements Runnable {
 	final private Socket socket;
@@ -66,7 +66,7 @@ public class RequestProcessor implements Runnable {
 		// if the file not exists a default factory will be create
 		if (canvas == null) {
 			// creating the default factory (same of the first instructions)
-			canvas = FactorySerialyzer.createFactoryMock();
+			canvas = FactorySerialyzer.createDefaultFactory();
 			
 			// adding the factory Id (the id is the file name/path)
 			canvas.setId(canvasId);

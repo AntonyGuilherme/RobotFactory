@@ -1,4 +1,4 @@
-package fr.tp.inf112.projects.robotsim.app;
+package fr.tp.inf112.projects.robotsim.infrasturcture;
 
 import java.io.IOException;
 import java.net.URI;
@@ -6,17 +6,19 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.logging.Logger;
 
 import fr.tp.inf112.projects.robotsim.model.Factory;
-import fr.tp.inf112.projects.robotsim.model.FactorySerialyzer;
 
 public class SimulationClient {
 	private HttpClient client = HttpClient.newHttpClient();
 	private FactorySerialyzer serialyzer = new FactorySerialyzer();
 	private String simulatioId;
+	private Logger logger;
 
-	public SimulationClient(String simulationId) {
+	public SimulationClient(String simulationId, Logger logger) {
 		this.simulatioId = simulationId;
+		this.logger = logger;
 	}
 
 	public Factory getFactory() {
@@ -24,16 +26,16 @@ public class SimulationClient {
 		try {
 			String url = String.format("http://localhost:8080/retrieve-simulation?simulationId=%s", simulatioId);
 			URI uri = URI.create(url);
-
+			
 			HttpRequest request = HttpRequest.newBuilder().uri(uri).GET().build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			
-			System.out.println(response.body());
+			logger.info(response.toString());
 			
 			return serialyzer.createFactoryFrom(response.body());
 		} 
 		catch (IOException | InterruptedException e) {
-			System.out.println(e);
+			logger.warning(e.getMessage());
 			
 			return null;
 		}
@@ -47,9 +49,10 @@ public class SimulationClient {
 			HttpRequest request = HttpRequest.newBuilder().uri(uri).GET().build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			
-			System.out.println(response);
+			logger.info(response.toString());
+			
 		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
+			logger.warning(e.getMessage());
 		}
 	}
 	
@@ -59,9 +62,12 @@ public class SimulationClient {
 			URI uri = URI.create(url);
 
 			HttpRequest request = HttpRequest.newBuilder().uri(uri).GET().build();
-			client.send(request, HttpResponse.BodyHandlers.ofString());
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			
+			logger.info(response.toString());
+			
 		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
+			logger.info(e.getMessage());
 		}
 	}
 

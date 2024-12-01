@@ -42,8 +42,6 @@ public class Robot extends Component {
 	private Position nextPosition;
 	
 	private FactoryPathFinder pathFinder;
-	
-	AtomicBoolean isMobile = new AtomicBoolean(true);
 
 	public Robot(final Factory factory,
 				 final FactoryPathFinder pathFinder,
@@ -100,7 +98,7 @@ public class Robot extends Component {
 	@Override
 	@JsonIgnore
 	public boolean isMobile() {
-		return isMobile.get();
+		return true;
 	}
 
 	@Override
@@ -132,7 +130,6 @@ public class Robot extends Component {
 		if (displacement != 0) {
 			notifyObservers();
 		}
-		
 		else if (isLivelyLocked()) {
 			displacement = calculateDisplacement();
 		}
@@ -146,26 +143,41 @@ public class Robot extends Component {
 		if (freeNeighbouringPosition != null) {
 			nextPosition = freeNeighbouringPosition;
 			displacement = moveToNextPathPosition();
+			
+			// calculating the path from the new position
 			computePathToCurrentTargetComponent();
 		}
 		return displacement;
 	}
 	
 	private Position findFreeNeighbouringPosition() {
+		// current position
 		final PositionedShape shape = new RectangularShape(nextPosition.getxCoordinate(),
 				   nextPosition.getyCoordinate(),
 				   2,
 				   2);
 		
-		shape.setyCoordinate(shape.getyCoordinate() + speed);
+		int x = shape.getxCoordinate();
+		int y = shape.getyCoordinate();
+		
+		// moving to the right
+		shape.setyCoordinate(y + speed);
 		if(!getFactory().hasObstacleAt(shape))
 			return shape.getPosition();
 		
-		shape.setyCoordinate(shape.getyCoordinate() - speed);
+		// moving to the left
+		shape.setyCoordinate(y - speed);
 		if(!getFactory().hasObstacleAt(shape))
 			return shape.getPosition();
 		
-		shape.setxCoordinate(shape.getxCoordinate() - speed);
+		shape.setyCoordinate(y);
+		
+		shape.setxCoordinate(x + speed);
+		if(!getFactory().hasObstacleAt(shape))
+			return shape.getPosition();
+		
+		// moving backwards
+		shape.setxCoordinate(x - speed);
 		if(!getFactory().hasObstacleAt(shape))
 			return shape.getPosition();
 		
@@ -193,7 +205,6 @@ public class Robot extends Component {
 				   										   2);
 		if (getFactory().hasMobileComponentAt(shape, this)) {
 			this.nextPosition = nextPosition;
-			this.isMobile.set(false);
 			
 			return null;
 		}

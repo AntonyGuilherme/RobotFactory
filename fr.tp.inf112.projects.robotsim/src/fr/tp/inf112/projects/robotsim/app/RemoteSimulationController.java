@@ -6,8 +6,9 @@ import java.util.logging.Logger;
 
 import fr.tp.inf112.projects.canvas.controller.Observer;
 import fr.tp.inf112.projects.canvas.model.Canvas;
+import fr.tp.inf112.projects.robotsim.infrasturcture.RemoteFactoryPersistenceManager;
+import fr.tp.inf112.projects.robotsim.infrasturcture.SimulationClient;
 import fr.tp.inf112.projects.robotsim.model.Factory;
-import fr.tp.inf112.projects.robotsim.model.RemoteFactoryPersistenceManager;
 
 public class RemoteSimulationController extends SimulatorController {
 

@@ -1,8 +1,8 @@
 package fr.tp.slr201.projects.robotsim.service.simulation.API;
 
 import fr.tp.inf112.projects.robotsim.infrasturcture.FactoryRepository;
+import fr.tp.inf112.projects.robotsim.infrasturcture.FactorySerialyzer;
 import fr.tp.inf112.projects.robotsim.model.Factory;
-import fr.tp.inf112.projects.robotsim.model.FactorySerialyzer;
 
 import java.util.Hashtable;
 import java.util.logging.Logger;

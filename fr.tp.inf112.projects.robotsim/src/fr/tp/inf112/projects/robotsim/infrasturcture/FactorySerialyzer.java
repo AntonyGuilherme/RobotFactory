@@ -1,4 +1,4 @@
-package fr.tp.inf112.projects.robotsim.model;
+package fr.tp.inf112.projects.robotsim.infrasturcture;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -9,6 +9,17 @@ import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
 
 import fr.tp.inf112.projects.canvas.model.impl.BasicVertex;
+import fr.tp.inf112.projects.robotsim.model.Area;
+import fr.tp.inf112.projects.robotsim.model.Battery;
+import fr.tp.inf112.projects.robotsim.model.ChargingStation;
+import fr.tp.inf112.projects.robotsim.model.Component;
+import fr.tp.inf112.projects.robotsim.model.Conveyor;
+import fr.tp.inf112.projects.robotsim.model.Door;
+import fr.tp.inf112.projects.robotsim.model.Factory;
+import fr.tp.inf112.projects.robotsim.model.Machine;
+import fr.tp.inf112.projects.robotsim.model.Robot;
+import fr.tp.inf112.projects.robotsim.model.Room;
+import fr.tp.inf112.projects.robotsim.model.Room.WALL;
 import fr.tp.inf112.projects.robotsim.model.path.CustomDijkstraFactoryPathFinder;
 import fr.tp.inf112.projects.robotsim.model.path.FactoryPathFinder;
 import fr.tp.inf112.projects.robotsim.model.path.JGraphTDijkstraFactoryPathFinder;
@@ -19,17 +30,19 @@ import fr.tp.inf112.projects.robotsim.model.shapes.RectangularShape;
 
 public class FactorySerialyzer {
 	
-	ObjectMapper mapper = new ObjectMapper();
-	
-	PolymorphicTypeValidator typeValidator = BasicPolymorphicTypeValidator.builder()
-			.allowIfSubType(PositionedShape.class.getPackageName())
-			.allowIfSubType(Component.class.getPackageName())
-			.allowIfSubType(BasicVertex.class.getPackageName())
-			.allowIfSubType(ArrayList.class.getName())
-			.allowIfSubType(LinkedHashSet.class.getName())
-			.build();
+	private ObjectMapper mapper;
 	
 	public FactorySerialyzer() {
+		mapper = new ObjectMapper();
+		
+		PolymorphicTypeValidator typeValidator = BasicPolymorphicTypeValidator.builder()
+				.allowIfSubType(PositionedShape.class.getPackageName())
+				.allowIfSubType(Component.class.getPackageName())
+				.allowIfSubType(BasicVertex.class.getPackageName())
+				.allowIfSubType(ArrayList.class.getName())
+				.allowIfSubType(LinkedHashSet.class.getName())
+				.build();
+		
 		mapper.activateDefaultTyping(typeValidator, ObjectMapper.DefaultTyping.NON_FINAL);
 	}
 	
@@ -43,9 +56,7 @@ public class FactorySerialyzer {
 		}
 	}
 	
-	public String toJSON(Factory factory) {
-		mapper.activateDefaultTyping(typeValidator, ObjectMapper.DefaultTyping.NON_FINAL);
-		
+	public String toJSON(Factory factory) {		
 		try {
 			return mapper.writeValueAsString(factory);
 		} catch (JsonProcessingException e) {
@@ -53,7 +64,7 @@ public class FactorySerialyzer {
 		}
 	}
 	
-	public static final Factory createFactoryMock() {
+	public static final Factory createDefaultFactory() {
 		
 		final Factory factory = new Factory(200, 200, "Simple Test Puck Factory");
 		final Room room1 = new Room(factory, new RectangularShape(20, 20, 75, 75), "Production Room 1");
