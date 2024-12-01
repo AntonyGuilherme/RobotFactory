@@ -8,7 +8,7 @@ import fr.tp.inf112.projects.robotsim.model.Factory;
 
 public class SimulatorController implements CanvasViewerController {
 	
-	private Factory factoryModel;
+	protected Factory factoryModel;
 	
 	private final CanvasPersistenceManager persistenceManager;
 	
@@ -18,7 +18,7 @@ public class SimulatorController implements CanvasViewerController {
 	
 	public SimulatorController(final Factory factoryModel,
 							   final CanvasPersistenceManager persistenceManager) {
-		this.factoryModel = factoryModel;
+		setCanvas(factoryModel);
 		this.persistenceManager = persistenceManager;
 	}
 
