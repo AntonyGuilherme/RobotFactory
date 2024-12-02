@@ -1,9 +1,15 @@
 package fr.tp.inf112.projects.robotsim.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
+
 import org.junit.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+
+import fr.tp.inf112.projects.canvas.model.Canvas;
+import fr.tp.inf112.projects.robotsim.infrasturcture.FactoryPersistenceManager;
 import fr.tp.inf112.projects.robotsim.infrasturcture.FactorySerialyzer;
 import fr.tp.inf112.projects.robotsim.model.Factory;
 
@@ -52,5 +58,21 @@ public class SerializationTests {
 		assertTrue(json.contains("speed"));
 		assertTrue(json.contains("charging"));
 		assertTrue(json.contains("radius"));
+	}
+	
+	@Test
+	public void shouldPersistFactory() {
+		FactorySerialyzer serialyzer = new FactorySerialyzer();
+		Factory factory = FactorySerialyzer.createDefaultFactory();
+		
+		FactoryPersistenceManager manager = new FactoryPersistenceManager(null);
+		
+		try {
+			System.out.println(factory);
+			manager.persist((Canvas)factory);
+		} catch (IOException e) {
+			e.printStackTrace();
+			assertTrue(false);
+		}
 	}
 }
