@@ -28,7 +28,8 @@ public class Factory extends Component implements Canvas, Observable {
     @JsonIgnore
 	private transient boolean simulationStarted;
     
-    private Logger logger = Logger.getLogger("Factory");
+    @JsonIgnore
+    private transient Logger logger = Logger.getLogger("Factory");
 	
 	public Factory(final int width,
 				   final int height,
