@@ -50,6 +50,7 @@ public class RequestProcessor implements Runnable {
 			this.logger.info("REQUEST CONCLUDE");
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			this.logger.warning(e.getMessage());
 		}
 	}

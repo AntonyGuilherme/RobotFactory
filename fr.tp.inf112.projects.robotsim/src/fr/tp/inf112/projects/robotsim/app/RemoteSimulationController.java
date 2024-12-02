@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import fr.tp.inf112.projects.canvas.controller.Observer;
 import fr.tp.inf112.projects.canvas.model.Canvas;
+import fr.tp.inf112.projects.robotsim.infrasturcture.FactorySimulationEventConsumer;
 import fr.tp.inf112.projects.robotsim.infrasturcture.RemoteFactoryPersistenceManager;
 import fr.tp.inf112.projects.robotsim.infrasturcture.SimulationClient;
 import fr.tp.inf112.projects.robotsim.model.Factory;
@@ -13,6 +14,7 @@ import fr.tp.inf112.projects.robotsim.model.Factory;
 public class RemoteSimulationController extends SimulatorController {
 
 	private final SimulationClient client;
+	private final FactorySimulationEventConsumer consummer;
 	
 	// the simulation will be updated in a background thread
 	private AtomicBoolean simulationStarted = new AtomicBoolean(false);
@@ -24,6 +26,7 @@ public class RemoteSimulationController extends SimulatorController {
 		super(remoteFactory, remoteFactoryPersistenceManager);
 		this.client = client;
 		this.logger = logger;
+		this.consummer = new FactorySimulationEventConsumer(this, remoteFactory.getId());
 	}
 
 
@@ -78,7 +81,8 @@ public class RemoteSimulationController extends SimulatorController {
 		this.simulationStarted.set(true);
 		
 		// updating the view in the background
-		new Thread(() -> this.updateFactory()).start();
+		//new Thread(() -> this.updateFactory()).start();
+		this.consummer.consumeMessages();
 	}
 
 	private void updateFactory() {

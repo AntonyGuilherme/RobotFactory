@@ -13,6 +13,7 @@ import fr.tp.inf112.projects.canvas.controller.Observer;
 import fr.tp.inf112.projects.canvas.model.Canvas;
 import fr.tp.inf112.projects.canvas.model.Figure;
 import fr.tp.inf112.projects.canvas.model.Style;
+import fr.tp.inf112.projects.robotsim.infrasturcture.FactoryModelChangedNotifier;
 import fr.tp.inf112.projects.robotsim.model.shapes.PositionedShape;
 import fr.tp.inf112.projects.robotsim.model.shapes.RectangularShape;
 
@@ -27,6 +28,8 @@ public class Factory extends Component implements Canvas, Observable {
     private transient List<Observer> observers;
     @JsonIgnore
 	private transient boolean simulationStarted;
+    
+    private transient FactoryModelChangedNotifier notifier;
     
     @JsonIgnore
     private transient Logger logger = Logger.getLogger("Factory");
@@ -68,6 +71,9 @@ public class Factory extends Component implements Canvas, Observable {
 		for (final Observer observer : getObservers()) {
 			observer.modelChanged();
 		}
+		
+		if (notifier != null)
+			notifier.notifyObservers();
 	}
 	
 	public boolean addComponent(final Component component) {
@@ -118,6 +124,7 @@ public class Factory extends Component implements Canvas, Observable {
 
 			while (isSimulationStarted()) {
 				behave();
+				
 				
 				try {
 					Thread.sleep(100);
@@ -176,5 +183,9 @@ public class Factory extends Component implements Canvas, Observable {
 		}
 		
 		return false;
+	}
+
+	public void setNotifier(FactoryModelChangedNotifier notifier) {
+		this.notifier = notifier;
 	}
 }

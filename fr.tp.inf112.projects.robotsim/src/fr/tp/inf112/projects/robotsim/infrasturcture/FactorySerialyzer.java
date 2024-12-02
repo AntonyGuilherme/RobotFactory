@@ -46,6 +46,22 @@ public class FactorySerialyzer {
 		mapper.activateDefaultTyping(typeValidator, ObjectMapper.DefaultTyping.NON_FINAL);
 	}
 	
+	public static ObjectMapper create() {
+		var mapper = new ObjectMapper();
+		
+		PolymorphicTypeValidator typeValidator = BasicPolymorphicTypeValidator.builder()
+				.allowIfSubType(PositionedShape.class.getPackageName())
+				.allowIfSubType(Component.class.getPackageName())
+				.allowIfSubType(BasicVertex.class.getPackageName())
+				.allowIfSubType(ArrayList.class.getName())
+				.allowIfSubType(LinkedHashSet.class.getName())
+				.build();
+		
+		mapper.activateDefaultTyping(typeValidator, ObjectMapper.DefaultTyping.NON_FINAL);
+		
+		return mapper;
+	}
+	
 	
 	public Factory createFactoryFrom(String json) {
 		try {

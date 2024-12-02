@@ -17,12 +17,14 @@ public class LocalNotifier implements FactoryModelChangedNotifier {
 	}
 
 	@Override
-	public boolean addObserver(Observer observer) {
-		return observers.add(observer);
+	public boolean addObserver() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override
-	public boolean removeObserver(Observer observer) {
-		return observers.remove(observer);
+	public boolean removeObserver() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

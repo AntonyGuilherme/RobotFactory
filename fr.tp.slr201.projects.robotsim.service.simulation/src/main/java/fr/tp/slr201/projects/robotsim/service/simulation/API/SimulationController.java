@@ -7,6 +7,8 @@ import fr.tp.inf112.projects.robotsim.model.Factory;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,20 +20,29 @@ public class SimulationController {
 	private static final Logger LOGGER = Logger.getLogger(SimulationController.class.getName());
 	private final FactoryRepository persistenceManager = new FactoryRepository(LOGGER);
 	private final FactorySerialyzer serialyzer = new FactorySerialyzer();
+	
+	@Autowired
+	private KafkaTemplate<String, Factory> simulationEventTemplate;
 
 	@GetMapping("/start-simulation")
 	public boolean startSimulation(@RequestParam String simulationId) {
+		
+				
 		try {
 			LOGGER.info(String.format("STARTING SIMULATION %s", simulationId));
 
 			// reading the factory
 			if (simulations.containsKey(simulationId)) {
 				final Factory factory = simulations.get(simulationId);
-
+				
+				// setting the notifier to inform about the simulation
+				final KafkaFactoryModelChangeNotifier notifier = new KafkaFactoryModelChangeNotifier(factory, simulationEventTemplate);
+				factory.setNotifier(notifier);
+				
 				// initiating the simulation of the factory in a second processor
 				// to not block the main thread
 				new Thread(() -> factory.startSimulation()).start();
-
+				
 				return true;
 			}
 

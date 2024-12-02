@@ -50,6 +50,7 @@ public class FactoryPersistenceManager extends AbstractCanvasPersistenceManager 
 			final OutputStream bufOutStream = new BufferedOutputStream(fileOutStream);
 			final ObjectOutputStream objOutStream = new ObjectOutputStream(bufOutStream);
 		) {	
+			System.out.println(canvasModel);
 			objOutStream.writeObject(canvasModel);
 		}
 	}
