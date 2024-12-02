@@ -68,6 +68,7 @@ public class SerializationTests {
 		FactoryPersistenceManager manager = new FactoryPersistenceManager(null);
 		
 		try {
+			factory.setId("flamengo");
 			System.out.println(factory);
 			manager.persist((Canvas)factory);
 		} catch (IOException e) {
