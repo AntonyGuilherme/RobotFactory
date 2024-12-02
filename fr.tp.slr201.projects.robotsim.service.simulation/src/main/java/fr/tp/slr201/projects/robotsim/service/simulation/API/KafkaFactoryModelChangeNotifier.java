@@ -8,11 +8,12 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 
+import fr.tp.inf112.projects.robotsim.infrasturcture.FactoryModelChangedNotifier;
 import fr.tp.inf112.projects.robotsim.infrasturcture.LocalNotifier;
 import fr.tp.inf112.projects.robotsim.infrasturcture.SimulationServiceUtils;
 import fr.tp.inf112.projects.robotsim.model.Factory;
 
-public class KafkaFactoryModelChangeNotifier extends LocalNotifier {
+public class KafkaFactoryModelChangeNotifier implements FactoryModelChangedNotifier {
 
 	private Factory factory;
 	private KafkaTemplate<String, Factory> simulationEventTemplate;

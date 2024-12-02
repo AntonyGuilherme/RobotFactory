@@ -6,9 +6,8 @@ import java.util.List;
 import fr.tp.inf112.projects.canvas.controller.Observer;
 
 public class LocalNotifier implements FactoryModelChangedNotifier {
-	
 	private List<Observer> observers = new LinkedList<Observer>();
-
+	
 	@Override
 	public void notifyObservers() {
 		for (Observer observer : observers) {
@@ -16,15 +15,11 @@ public class LocalNotifier implements FactoryModelChangedNotifier {
 		}
 	}
 
-	@Override
-	public boolean addObserver() {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean addObserver(Observer observer) {
+		return observers.add(observer);
 	}
 
-	@Override
-	public boolean removeObserver() {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean removeObserver(Observer observer) {
+		return observers.remove(observer);
 	}
 }

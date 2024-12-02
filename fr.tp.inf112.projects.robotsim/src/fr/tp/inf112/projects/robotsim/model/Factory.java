@@ -14,6 +14,7 @@ import fr.tp.inf112.projects.canvas.model.Canvas;
 import fr.tp.inf112.projects.canvas.model.Figure;
 import fr.tp.inf112.projects.canvas.model.Style;
 import fr.tp.inf112.projects.robotsim.infrasturcture.FactoryModelChangedNotifier;
+import fr.tp.inf112.projects.robotsim.infrasturcture.LocalNotifier;
 import fr.tp.inf112.projects.robotsim.model.shapes.PositionedShape;
 import fr.tp.inf112.projects.robotsim.model.shapes.RectangularShape;
 
@@ -25,11 +26,11 @@ public class Factory extends Component implements Canvas, Observable {
     private List<Component> components;
 	
     @JsonIgnore
-    private transient List<Observer> observers;
-    @JsonIgnore
 	private transient boolean simulationStarted;
     
     private transient FactoryModelChangedNotifier notifier;
+    // Due to : Observer dependency in the simulation server
+    public transient LocalNotifier obseversNoitifier = new LocalNotifier();
     
     @JsonIgnore
     private transient Logger logger = Logger.getLogger("Factory");
@@ -40,40 +41,28 @@ public class Factory extends Component implements Canvas, Observable {
 		super(null, new RectangularShape(0, 0, width, height), name);
 		
 		components = new ArrayList<>();
-		observers = null;
 		simulationStarted = false;
 		
 	}
 	
 	public Factory() {
 	}
-	
-	@JsonIgnore
-	public List<Observer> getObservers() {
-		if (observers == null) {
-			observers = new ArrayList<>();
-		}
-		
-		return observers;
-	}
 
 	@Override
 	public boolean addObserver(Observer observer) {
-		return getObservers().add(observer);
+		return obseversNoitifier.addObserver(observer);
 	}
 
 	@Override
 	public boolean removeObserver(Observer observer) {
-		return getObservers().remove(observer);
+		return obseversNoitifier.removeObserver(observer);
 	}
 	
 	public void notifyObservers() {
-		for (final Observer observer : getObservers()) {
-			observer.modelChanged();
-		}
-		
 		if (notifier != null)
 			notifier.notifyObservers();
+		else
+			obseversNoitifier.notifyObservers();
 	}
 	
 	public boolean addComponent(final Component component) {

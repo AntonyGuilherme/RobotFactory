@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import fr.tp.inf112.projects.canvas.controller.Observer;
 import fr.tp.inf112.projects.canvas.model.Canvas;
 import fr.tp.inf112.projects.robotsim.infrasturcture.FactorySimulationEventConsumer;
+import fr.tp.inf112.projects.robotsim.infrasturcture.LocalNotifier;
 import fr.tp.inf112.projects.robotsim.infrasturcture.RemoteFactoryPersistenceManager;
 import fr.tp.inf112.projects.robotsim.infrasturcture.SimulationClient;
 import fr.tp.inf112.projects.robotsim.model.Factory;
@@ -55,15 +56,9 @@ public class RemoteSimulationController extends SimulatorController {
 		}
 		
 		// adding the observers to the updated factory
-		List<Observer> observers = null;
-
-		observers = factoryModel.getObservers();
-
-		factoryModel = (Factory) canvasModel;
-
-		for (final Observer observer : observers) {
-			factoryModel.addObserver(observer);
-		}
+		LocalNotifier notifier = factoryModel.obseversNoitifier;
+		factoryModel = (Factory) canvasModel;		
+		factoryModel.obseversNoitifier = notifier;
 		
 		// notifying the observers to update the simulation view
 		factoryModel.notifyObservers();
