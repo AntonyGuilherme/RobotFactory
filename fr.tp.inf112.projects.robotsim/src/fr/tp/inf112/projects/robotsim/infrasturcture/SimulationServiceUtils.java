@@ -1,4 +1,4 @@
-package fr.tp.slr201.projects.robotsim.service.simulation.API;
+package fr.tp.inf112.projects.robotsim.infrasturcture;
 
 import java.util.Properties;
 
@@ -10,7 +10,7 @@ public class SimulationServiceUtils {
 	public static final String BOOTSTRAP_SERVERS = "localhost:9092";
 	private static final String GROUP_ID = "Factory-Simulation-Group";
 	private static final String AUTO_OFFSET_RESET = "earliest";
-	private static final String TOPIC = "simulation-topic-";
+	private static final String TOPIC = "simulation-";
 
 	public static String getTopicName(final Factory factoryModel) {
 		return TOPIC + factoryModel.getId();

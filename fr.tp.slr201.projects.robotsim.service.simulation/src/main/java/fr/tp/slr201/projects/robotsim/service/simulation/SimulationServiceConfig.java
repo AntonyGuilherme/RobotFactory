@@ -16,8 +16,8 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fr.tp.inf112.projects.robotsim.infrasturcture.FactorySerialyzer;
+import fr.tp.inf112.projects.robotsim.infrasturcture.SimulationServiceUtils;
 import fr.tp.inf112.projects.robotsim.model.Factory;
-import fr.tp.slr201.projects.robotsim.service.simulation.API.SimulationServiceUtils;
 
 @Configuration
 public class SimulationServiceConfig {

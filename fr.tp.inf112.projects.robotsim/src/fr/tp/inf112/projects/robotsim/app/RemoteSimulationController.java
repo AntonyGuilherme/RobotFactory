@@ -26,7 +26,7 @@ public class RemoteSimulationController extends SimulatorController {
 		super(remoteFactory, remoteFactoryPersistenceManager);
 		this.client = client;
 		this.logger = logger;
-		this.consummer = new FactorySimulationEventConsumer(this, remoteFactory.getId());
+		this.consummer = new FactorySimulationEventConsumer(this, remoteFactory);
 	}
 
 
@@ -80,22 +80,8 @@ public class RemoteSimulationController extends SimulatorController {
 		client.startSimulation();
 		this.simulationStarted.set(true);
 		
-		// updating the view in the background
-		//new Thread(() -> this.updateFactory()).start();
-		this.consummer.consumeMessages();
-	}
-
-	private void updateFactory() {
-		// updating the factoring while the simulation still running
-		while (this.simulationStarted.get()) {
-			setCanvas(client.getFactory());
-
-			try {
-				Thread.sleep(150);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+		// updating the view in the background consdering
+		new Thread( () -> this.consummer.consumeMessages()).start();
 	}
 
 	@Override

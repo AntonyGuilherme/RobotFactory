@@ -15,7 +15,7 @@ import fr.tp.inf112.projects.robotsim.model.Factory;
 public class SimulatorApplication {
 	
 	private static final Logger LOGGER = Logger.getLogger(SimulatorApplication.class.getName());
-	private static String SIMULATION_ID = "vasco.factory";
+	private static String SIMULATION_ID = "cruzeiro.factory";
 			
 	public static void main(String[] args) {
 		LOGGER.info("Starting the robot simulator...");
