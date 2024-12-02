@@ -8,7 +8,6 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import fr.tp.inf112.projects.canvas.model.Canvas;
 import fr.tp.inf112.projects.robotsim.infrasturcture.FactoryPersistenceManager;
 import fr.tp.inf112.projects.robotsim.infrasturcture.FactorySerialyzer;
 import fr.tp.inf112.projects.robotsim.model.Factory;
@@ -68,10 +67,10 @@ public class SerializationTests {
 		FactoryPersistenceManager manager = new FactoryPersistenceManager(null);
 		
 		try {
-			factory.setId("flamengo");
-			System.out.println(factory);
-			manager.persist((Canvas)factory);
+			factory.setId("sport");
+			manager.persist(factory);
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 			assertTrue(false);
 		}
