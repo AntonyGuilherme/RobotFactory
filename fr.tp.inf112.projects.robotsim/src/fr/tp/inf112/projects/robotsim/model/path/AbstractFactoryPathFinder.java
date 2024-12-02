@@ -66,8 +66,6 @@ public abstract class AbstractFactoryPathFinder<Graph, Vertex> implements Factor
 					addEdge(vertex, succVertex);
 				}
 			}
-			
-			System.out.println(graph.toString());
 		}
 	}
 	
