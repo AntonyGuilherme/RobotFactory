@@ -1,10 +1,7 @@
 package fr.tp.inf112.projects.robotsim.app;
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
-
-import fr.tp.inf112.projects.canvas.controller.Observer;
 import fr.tp.inf112.projects.canvas.model.Canvas;
 import fr.tp.inf112.projects.robotsim.infrasturcture.FactorySimulationEventConsumer;
 import fr.tp.inf112.projects.robotsim.infrasturcture.LocalNotifier;
@@ -53,6 +50,8 @@ public class RemoteSimulationController extends SimulatorController {
 			
 			// updating the current simulation
 			client.setSimulationId(canvasModel.getId());
+			
+			this.consummer.redefineTopic((Factory) canvasModel);
 		}
 		
 		// adding the observers to the updated factory
