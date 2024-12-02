@@ -1,14 +1,13 @@
 package fr.tp.inf112.projects.robotsim.model.path;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 import fr.tp.inf112.projects.robotsim.model.Factory;
 import fr.tp.inf112.projects.robotsim.model.Position;
 import fr.tp.inf112.projects.robotsim.model.shapes.PositionedShape;
 import fr.tp.inf112.projects.robotsim.model.shapes.RectangularShape;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public abstract class AbstractFactoryPathFinder<Graph, Vertex> implements FactoryPathFinder, Serializable {
 
@@ -66,8 +65,6 @@ public abstract class AbstractFactoryPathFinder<Graph, Vertex> implements Factor
 					addEdge(vertex, succVertex);
 				}
 			}
-			
-			System.out.println(graph.toString());
 		}
 	}
 	

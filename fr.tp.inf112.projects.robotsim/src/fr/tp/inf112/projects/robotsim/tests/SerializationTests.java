@@ -47,7 +47,6 @@ public class SerializationTests {
 		
 		String json = serialyzer.toJSON(factory);
 		
-		System.out.println(json);
 		assertTrue(json.contains("battery"));
 		assertTrue(json.contains("speed"));
 		assertTrue(json.contains("charging"));
